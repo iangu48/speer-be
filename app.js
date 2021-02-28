@@ -6,12 +6,9 @@ const cookieParser = require('cookie-parser');
 const initMongo = require("./db");
 const morgan = require('morgan')
 
-const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
-const PORT = process.env.PORT || 8080
-const HOST_NAME = process.env.HOST || "localhost"
 
 initMongo().then(console.log).catch(console.log);
 
@@ -19,7 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(morgan('combined'))
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
@@ -28,7 +24,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
     logger(err)
     res.status(err.status || 500)
 
@@ -42,10 +38,6 @@ app.use(function (err, req, res, next) {
 function logger(err) {
     // console.error(err)
 }
-
-app.listen(PORT, HOST_NAME, () => {
-    console.log(`Server started at ${HOST_NAME}:${PORT}`)
-})
 
 
 module.exports = app

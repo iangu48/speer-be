@@ -6,7 +6,6 @@ const {check, validationResult} = require("express-validator/check");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require('../models/User')
-const createError = require('http-errors');
 
 router.post("/signup",
     [
@@ -17,6 +16,7 @@ router.post("/signup",
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             next(errors.array())
+            return
         }
 
         const { username, password } = req.body;
